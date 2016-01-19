@@ -3,7 +3,7 @@ Momo Email Listener is a Laravel application.
 Momo read emails from your email inbox. This same engine is being used in <a href="https://github.com/ladybirdweb/faveo-helpdesk">Faveo HELPDESK</a>. 
 Momo is build using https://github.com/barbushin/php-imap
 
-<p>To run Momo your host just needs a couple of things:</p>
+<p>To run Momo you need a couple of things:</p>
 <ul>
   <li>PHP 5.5 or greater</li>
   <li>MySQL 5.5 or greater</li>
