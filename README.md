@@ -12,8 +12,8 @@ Momo is build using https://github.com/barbushin/php-imap
 
 <h3><a id="user-content-credits" href="https://github.com/ladybirdweb/faveo-helpdesk#credits" aria-hidden="true"></a>Credits</h3>
 <ul>
-  <li>Laravel Framework</li>
-  <li>Admin LTE Theme</li>
+  <li><a href="https://github.com/laravel/laravel">Laravel Framework</a></li>
+  <li><a href="https://github.com/almasaeed2010/AdminLTE">Admin LTE Theme</a></li>
   <li><a href="https://github.com/barbushin/php-imap">PHP IMAP</a></li>
 </ul>
 
