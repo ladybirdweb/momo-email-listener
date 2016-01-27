@@ -1,2 +1,2 @@
 $ cat .gitattributes
-*.rb linguist-language=Laravel
+*.rb linguist-language=php
