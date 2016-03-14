@@ -1,2 +1,4 @@
-$ cat .gitattributes
-*.rb linguist-language=php
+* text=auto
+*.css linguist-vendored
+*.less linguist-vendored
+*.js linguist-vendored
