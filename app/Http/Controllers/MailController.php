@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 // controllers
-use App\Http\Controllers\Controller;
 // model
 use App\Attachment;
 use App\Emails;
@@ -123,6 +122,7 @@ class MailController extends Controller
 
     /**
      * fetch_attachments.
+     *
      * @return type
      */
     public function fetch_attachments()
@@ -141,7 +141,9 @@ class MailController extends Controller
 
     /**
      * function to load data.
+     *
      * @param type $id
+     *
      * @return type file
      */
     public function get_data($id)
