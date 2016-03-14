@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 // controllers
+use App\Http\Controllers\Controller;
 // request
 use App\Emails;
 // model
-use App\Http\Requests\EmailsRequest;
 use Crypt;
 // classes
 use Exception;
@@ -20,21 +20,17 @@ use Illuminate\Http\Request;
  *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class EmailsController extends Controller
-{
+class EmailsController extends Controller {
+
     /**
      * Display a listing of the Emails.
-     *
      * @param type Emails $emails
-     *
      * @return type view
      */
-    public function index(Emails $email)
-    {
+    public function index(Emails $email) {
         try {
             // fetch all the emails from emails table
             $emails = $email->get();
-
             return view('email.index', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -43,11 +39,9 @@ class EmailsController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
      * @return type Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('email.create');
         } catch (Exception $e) {
@@ -58,22 +52,19 @@ class EmailsController extends Controller
 
     /**
      * Check for email input validation.
-     *
      * @param Request $request
-     *
      * @return int
      */
-    public function validatingEmailSettings(Request $request)
-    {
+    public function validatingEmailSettings(Request $request) {
         $validator = \Validator::make(
                         [
                     'email_address' => $request->email_address,
-                    'email_name'    => $request->email_name,
-                    'password'      => $request->password,
+                    'email_name' => $request->email_name,
+                    'password' => $request->password,
                         ], [
                     'email_address' => 'required|email|unique:emails',
-                    'email_name'    => 'required',
-                    'password'      => 'required',
+                    'email_name' => 'required',
+                    'password' => 'required',
                         ]
         );
         if ($validator->fails()) {
@@ -91,22 +82,16 @@ class EmailsController extends Controller
             return 'Incoming email connection failed';
         }
         $need_to_check_imap = 1;
-
         $return = $this->store($request);
-
         return $return;
     }
 
     /**
      * Store a newly created resource in storage.
-     *
      * @param type $request
-     *
      * @return int
      */
-    public function store($request)
-    {
-        //        dd($request);
+    public function store($request) {
         $email = new Emails();
         try {
             // saving all the fields to the database
@@ -115,34 +100,28 @@ class EmailsController extends Controller
                 $email->password = Crypt::encrypt($request->input('password'));
                 $email->save(); // run save
                 // returns success message for successful email creation
-                // return redirect('emails')->with('success', 'Email Created sucessfully');
                 return 1;
             } else {
                 // returns fail message for unsuccessful save execution
-                // return redirect('emails')->with('fails', 'Email can not Create');
                 return 0;
             }
         } catch (Exception $e) {
             // returns if try fails
-            // return redirect()->back()->with('fails', $e->getMessage());
-            return 0;
+            return $e->getMessage();
         }
     }
 
-    public function show()
-    {
+    public function show() {
+        
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param type   $id
      * @param Emails $email
-     *
      * @return type Response
      */
-    public function edit($id, Emails $email)
-    {
+    public function edit($id, Emails $email) {
         try {
             // fetch the selected emails
             $emails = $email->whereId($id)->first();
@@ -156,22 +135,19 @@ class EmailsController extends Controller
 
     /**
      * Check for email input validation.
-     *
      * @param EmailsRequest $request
-     *
      * @return int
      */
-    public function validatingEmailSettingsUpdate($id, Request $request)
-    {
+    public function validatingEmailSettingsUpdate($id, Request $request) {
         $validator = \Validator::make(
                         [
                     'email_address' => $request->email_address,
-                    'email_name'    => $request->email_name,
-                    'password'      => $request->password,
+                    'email_name' => $request->email_name,
+                    'password' => $request->password,
                         ], [
                     'email_address' => 'required|email',
-                    'email_name'    => 'required',
-                    'password'      => 'required',
+                    'email_name' => 'required',
+                    'password' => 'required',
                         ]
         );
         if ($validator->fails()) {
@@ -181,7 +157,6 @@ class EmailsController extends Controller
                 $val .= $value;
             }
             $return_data = rtrim(str_replace('.', ',', $val), ',');
-
             return $return_data;
         }
         $imap_check = $this->getImapStream($request);
@@ -190,7 +165,6 @@ class EmailsController extends Controller
         }
         $need_to_check_imap = 1;
         $return = $this->update($id, $request);
-
         return $return;
     }
 
@@ -202,8 +176,7 @@ class EmailsController extends Controller
      *
      * @return type Response
      */
-    public function update($id, $request)
-    {
+    public function update($id, $request) {
         try {
             // fetch the selected emails
             $emails = Emails::whereId($id)->first();
@@ -213,28 +186,22 @@ class EmailsController extends Controller
             $emails->password = Crypt::encrypt($request->input('password'));
             $emails->save();
             // returns success message for successful email update
-            // return redirect('emails')->with('success', 'Email Updated sucessfully');
             return 1;
         } catch (Exception $e) {
             // returns if try fails
-            // return redirect()->back()->with('fails', $e->getMessage());
-            return 0;
+            return $e->getMessage();
         }
-
         // return $return;
         return 0;
     }
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param type   $id
      * @param Emails $email
-     *
      * @return type Redirect
      */
-    public function destroy($id, Emails $email)
-    {
+    public function destroy($id, Emails $email) {
         try {
             // fetching the database instance of the current email
             $emails = $email->whereId($id)->first();
@@ -252,11 +219,9 @@ class EmailsController extends Controller
 
     /**
      * inbox page to fetch all mails.
-     *
      * @return type
      */
-    public function inbox()
-    {
+    public function inbox() {
         if (\Schema::hasTable('emails')) {
             return view('mailbox.inbox');
         } else {
@@ -266,38 +231,32 @@ class EmailsController extends Controller
 
     /**
      * to fetch current mail details.
-     *
      * @param type $id
-     *
      * @return type view
      */
-    public function fetchmail($id)
-    {
+    public function fetchmail($id) {
         return view('mailbox.readmail', compact('id'));
     }
 
     /**
      * Create imap connection.
-     *
      * @param type $request
-     *
      * @return int
      */
-    public function getImapStream($request)
-    {
+    public function getImapStream($request) {
         $fetching_status = $request->input('fetching_status');
         $username = $request->input('email_address');
         $password = $request->input('password');
         $protocol_id = $request->input('mailbox_protocol');
-        $fetching_protocol = '/'.$request->input('fetching_protocol');
-        $fetching_encryption = '/'.$request->input('fetching_encryption');
+        $fetching_protocol = '/' . $request->input('fetching_protocol');
+        $fetching_encryption = '/' . $request->input('fetching_encryption');
         if ($fetching_encryption == 'none') {
             $fetching_encryption = 'novalidate-cert';
         }
-        $mailbox_protocol = $fetching_protocol.$fetching_encryption;
+        $mailbox_protocol = $fetching_protocol . $fetching_encryption;
         $host = $request->input('fetching_host');
         $port = $request->input('fetching_port');
-        $mailbox = '{'.$host.':'.$port.$mailbox_protocol.'}INBOX';
+        $mailbox = '{' . $host . ':' . $port . $mailbox_protocol . '}INBOX';
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
         } catch (\Exception $ex) {
@@ -309,7 +268,6 @@ class EmailsController extends Controller
         } else {
             $return = 0;
         }
-
         return $return;
     }
 
@@ -320,15 +278,14 @@ class EmailsController extends Controller
      *
      * @return int
      */
-    public function checkImapStream($imap_stream)
-    {
+    public function checkImapStream($imap_stream) {
         $check_imap_stream = imap_check($imap_stream);
         if ($check_imap_stream) {
             $imap_stream = 1;
         } else {
             $imap_stream = 0;
         }
-
         return $imap_stream;
     }
+
 }
