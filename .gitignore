@@ -1,4 +1,3 @@
-vendor/
 node_modules/
 
 # Laravel 4 specific
@@ -10,5 +9,4 @@ bootstrap/cache/
 storage/
 .env.*.php
 .env.php
-.env
 .env.example
