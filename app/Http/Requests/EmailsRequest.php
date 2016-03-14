@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 /**
  * EmailsRequest.
  *
@@ -40,10 +38,10 @@ class EmailsRequest extends Request
             // 'user_name' => 'required',
             // 'sending_host' => 'required',
             // 'sending_port' => 'required',
-           'fetching_host'    => 'required',
-           'fetching_port'    => 'required',
+           'fetching_host'          => 'required',
+           'fetching_port'          => 'required',
            'fetching_encryption'    => 'required',
-           'fetching_protocol'    => 'required',
+           'fetching_protocol'      => 'required',
 //            'mailbox_protocol' => 'required',
         ];
     }

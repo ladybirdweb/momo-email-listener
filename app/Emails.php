@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
  * ======================================
  * Emails Model
  * ======================================
- * This is a model representing the emails table
+ * This is a model representing the emails table.
+ *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class Emails extends Model {
-
+class Emails extends Model
+{
     protected $table = 'emails';
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -26,5 +27,4 @@ class Emails extends Model {
         'fetching_status', 'move_to_folder', 'delete_email', 'do_nothing',
         'sending_status', 'authentication', 'header_spoofing', 'imap_config',
     ];
-
 }

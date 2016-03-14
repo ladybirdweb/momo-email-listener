@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 /**
  * EmailsEditRequest.
  *
@@ -37,11 +35,11 @@ class EmailsEditRequest extends Request
             // 'imap_config' => 'required',
             'password' => 'required|min:6',
             // 'user_name' => 'required',
-            
-            'fetching_host'    => 'required',
-            'fetching_port'    => 'required',
+
+            'fetching_host'          => 'required',
+            'fetching_port'          => 'required',
             'fetching_encryption'    => 'required',
-            'fetching_protocol'    => 'required',
+            'fetching_protocol'      => 'required',
 
         ];
     }
