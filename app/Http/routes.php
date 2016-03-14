@@ -19,7 +19,6 @@ Route::get('/layout', function () {
     return view('layout/layout');
 });
 
-
 /*
   |--------------------------------------------------------------------------
   | Application Routes
