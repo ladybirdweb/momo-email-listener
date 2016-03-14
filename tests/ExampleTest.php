@@ -13,7 +13,7 @@ class ExampleTest extends TestCase
      */
     public function testBasicExample()
     {
-        // $this->visit('/')
-             // ->see('Laravel 5');
+        $this->visit('/')
+             ->see('Please run Database migration first to start using the system');
     }
 }
