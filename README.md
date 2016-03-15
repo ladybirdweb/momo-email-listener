@@ -30,7 +30,6 @@ Momo is build using https://github.com/barbushin/php-imap
 <p>Download &amp; Extract the zip file</p>
 <p>Under the Project folder open the .env file and setup your database configurations</p>
 <pre>
-<code>
 	APP_ENV=local
 	APP_DEBUG=true
 	APP_KEY=SomeRandomString
@@ -57,12 +56,9 @@ Momo is build using https://github.com/barbushin/php-imap
 	MAIL_PASSWORD=null
 	MAIL_ENCRYPTION=null
 </code>
-</pre>
 <p>Run the migration command to create tables under Momo directory via CLI</p>
 <pre>
-	<code>
 		php artisan migrate
-	</code>
 </pre>
 <p>Now you can open the Momo link in your browser</p>
 <h3><a id="user-content-credits" href="https://github.com/ladybirdweb/faveo-helpdesk#credits" aria-hidden="true"></a>Credits</h3>
