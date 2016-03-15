@@ -58,7 +58,7 @@ Momo is build using https://github.com/barbushin/php-imap
 </pre>
 <p>Run the migration command to create tables under Momo directory via CLI</p>
 <pre>
-		php artisan migrate
+	php artisan migrate
 </pre>
 <p>Now you can open the Momo link in your browser</p>
 <h3><a id="user-content-credits" href="https://github.com/ladybirdweb/faveo-helpdesk#credits" aria-hidden="true"></a>Credits</h3>
