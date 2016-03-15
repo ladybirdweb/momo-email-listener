@@ -71,7 +71,10 @@ class="active"
                 <div class="col-xs-3 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
                     <label>Fetching Protocol</label>
                     {!! $errors->first('fetching_protocol', '<spam class="help-block">:message</spam>') !!}
-                    <input type="text" name="fetching_protocol" class='form-control'  id='fetching_protocol'>
+                    <!-- <input type="text" name="fetching_protocol" class='form-control'  id='fetching_protocol'> -->
+                    <select name="fetching_protocol" class='form-control'  id='fetching_protocol'>
+                        <option value="imap">IMAP</option>
+                    </select>
                 </div>
                 <div class="col-xs-3 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
                     <label>Fetching Host</label>
@@ -86,7 +89,14 @@ class="active"
                 <div class="col-xs-3 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                     <label>Fetching Encryption</label>
                     {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
-                    <input type="text" name="fetching_encryption" class='form-control'  id='fetching_encryption'>
+                    <!-- <input type="text" name="fetching_encryption" class='form-control'  id='fetching_encryption'> -->
+                    <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
+                        <option value="none">None</option>
+                        <option value="ssl">SSL</option>
+                        <option value="tls">TLS</option>
+                        <option value="ssl/no-validate">SSL (Accept all certificates)</option>
+                        <option value="tls/no-validate">TLS (Accept all certificates)</option>
+                    </select>
                 </div>
             </div>
         </div>

@@ -64,7 +64,10 @@ class="active"
             <div class="row">
                 <div class="col-xs-3 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
                     <label>Fetching Protocol</label>
-                    <input type="text" name="fetching_protocol" class='form-control'  id='fetching_protocol' value="{!! $emails->fetching_protocol !!}">
+                    <!-- <input type="text" name="fetching_protocol" class='form-control'  id='fetching_protocol' value="{!! $emails->fetching_protocol !!}"> -->
+                    <select name="fetching_protocol" class='form-control'  id='fetching_protocol'>
+                        <option value="imap">IMAP</option>
+                    </select>
                 </div>
                 <div class="col-xs-3 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
                     <label>Fetching Host</label>
@@ -76,7 +79,14 @@ class="active"
                 </div>
                 <div class="col-xs-3 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                     <label>Fetching Encryption</label>
-                    <input type="text" name="fetching_encryption" class='form-control'  id='fetching_encryption' value="{!! $emails->fetching_encryption !!}">
+                    <!-- <input type="text" name="fetching_encryption" class='form-control'  id='fetching_encryption' value="{!! $emails->fetching_encryption !!}"> -->
+                    <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
+                        <option @if($emails->fetching_encryption == 'none') {!! 'selected="selected"' !!} @endif value="none">None</option>
+                        <option @if($emails->fetching_encryption == 'ssl') {!! 'selected="selected"' !!} @endif value="ssl">SSL</option>
+                        <option @if($emails->fetching_encryption == 'tls') {!! 'selected="selected"' !!} @endif value="tls">TLS</option>
+                        <option @if($emails->fetching_encryption == 'ssl/no-validate') {!! 'selected="selected"' !!} @endif value="ssl/no-validate">SSL (Accept all certificates)</option>
+                        <option @if($emails->fetching_encryption == 'tls/no-validate') {!! 'selected="selected"' !!} @endif value="tls/no-validate">TLS (Accept all certificates)</option>
+                    </select>
                 </div>
             </div>
         </div>    
