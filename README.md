@@ -55,7 +55,7 @@ Momo is build using https://github.com/barbushin/php-imap
 	MAIL_USERNAME=null
 	MAIL_PASSWORD=null
 	MAIL_ENCRYPTION=null
-</code>
+</pre>
 <p>Run the migration command to create tables under Momo directory via CLI</p>
 <pre>
 		php artisan migrate
