@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "php-imap/php-imap": "~2.0",
-        "neitanod/forceutf8": "dev-master"
+        "neitanod/forceutf8": "dev-master",
+        "phpmailer/phpmailer": "^5.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

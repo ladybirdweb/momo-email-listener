@@ -36,7 +36,7 @@ class="active"
         </div>
         <div class="mailbox-read-message">
             <?php
-            $attachment = App\Attachment::where('thread_id', '=', $thread->id)->first();
+            $attachment = \App\Attcahment::where('thread_id', '=', $thread->id)->first();
             if ($attachment == null) {
                 $body = $thread->body;
             } else {
@@ -45,7 +45,7 @@ class="active"
                 // header("Content-type: image/jpeg");
                 // echo "<img src='".base64_decode($attachment->file)."' style='width:128px;height:128px'/> ";
                 $body = $thread->body;
-                $attachments = App\Attachment::where('thread_id', '=', $thread->id)->orderBy('id', 'DESC')->get();
+                $attachments = \App\Attcahment::where('thread_id', '=', $thread->id)->orderBy('id', 'DESC')->get();
                 // $i = 0;
                 foreach ($attachments as $attachment) {
                     // $i++;
@@ -102,7 +102,7 @@ class="active"
 
             <ul class='mailbox-attachments clearfix'>
                 <?php
-                $attachments = App\Attachment::where('thread_id', '=', $thread->id)->get();
+                $attachments = \App\Attcahment::where('thread_id', '=', $thread->id)->get();
                 foreach ($attachments as $attachment) {
 
                     $size = $attachment->size;

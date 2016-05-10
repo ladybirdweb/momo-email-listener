@@ -288,10 +288,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     protected function bootIfNotBooted()
     {
-        $class = get_class($this);
-
-        if (! isset(static::$booted[$class])) {
-            static::$booted[$class] = true;
+        if (! isset(static::$booted[static::class])) {
+            static::$booted[static::class] = true;
 
             $this->fireModelEvent('booting', false);
 
@@ -318,9 +316,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     protected static function bootTraits()
     {
-        foreach (class_uses_recursive(get_called_class()) as $trait) {
-            if (method_exists(get_called_class(), $method = 'boot'.class_basename($trait))) {
-                forward_static_call([get_called_class(), $method]);
+        $class = static::class;
+
+        foreach (class_uses_recursive($class) as $trait) {
+            if (method_exists($class, $method = 'boot'.class_basename($trait))) {
+                forward_static_call([$class, $method]);
             }
         }
     }
@@ -348,15 +348,15 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public static function addGlobalScope($scope, Closure $implementation = null)
     {
         if (is_string($scope) && $implementation !== null) {
-            return static::$globalScopes[get_called_class()][$scope] = $implementation;
+            return static::$globalScopes[static::class][$scope] = $implementation;
         }
 
         if ($scope instanceof Closure) {
-            return static::$globalScopes[get_called_class()][uniqid('scope')] = $scope;
+            return static::$globalScopes[static::class][spl_object_hash($scope)] = $scope;
         }
 
         if ($scope instanceof Scope) {
-            return static::$globalScopes[get_called_class()][get_class($scope)] = $scope;
+            return static::$globalScopes[static::class][get_class($scope)] = $scope;
         }
 
         throw new InvalidArgumentException('Global scope must be an instance of Closure or Scope.');
@@ -381,7 +381,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public static function getGlobalScope($scope)
     {
-        $modelScopes = Arr::get(static::$globalScopes, get_called_class(), []);
+        $modelScopes = Arr::get(static::$globalScopes, static::class, []);
 
         if (is_string($scope)) {
             return isset($modelScopes[$scope]) ? $modelScopes[$scope] : null;
@@ -399,7 +399,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public function getGlobalScopes()
     {
-        return Arr::get(static::$globalScopes, get_class($this), []);
+        return Arr::get(static::$globalScopes, static::class, []);
     }
 
     /**
@@ -1266,7 +1266,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $instance = new static;
 
         foreach ($instance->getObservableEvents() as $event) {
-            static::$dispatcher->forget("eloquent.{$event}: ".get_called_class());
+            static::$dispatcher->forget("eloquent.{$event}: ".static::class);
         }
     }
 
@@ -1281,7 +1281,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     protected static function registerModelEvent($event, $callback, $priority = 0)
     {
         if (isset(static::$dispatcher)) {
-            $name = get_called_class();
+            $name = static::class;
 
             static::$dispatcher->listen("eloquent.{$event}: {$name}", $callback, $priority);
         }
@@ -1672,7 +1672,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // We will append the names of the class to the event to distinguish it from
         // other model events that are fired, allowing us to listen on each model
         // event set individually instead of catching event for all the models.
-        $event = "eloquent.{$event}: ".get_class($this);
+        $event = "eloquent.{$event}: ".static::class;
 
         $method = $halt ? 'until' : 'fire';
 
@@ -2038,7 +2038,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     {
         $morphMap = Relation::morphMap();
 
-        $class = get_class($this);
+        $class = static::class;
 
         if (! empty($morphMap) && in_array($class, $morphMap)) {
             return array_search($class, $morphMap, true);
@@ -2282,11 +2282,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
 
         static::unguard();
 
-        $result = $callback();
-
-        static::reguard();
-
-        return $result;
+        try {
+            return $callback();
+        } finally {
+            static::reguard();
+        }
     }
 
     /**
@@ -2626,16 +2626,14 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // an appropriate native PHP type dependant upon the associated value
         // given with the key in the pair. Dayle made this comment line up.
         if ($this->hasCast($key)) {
-            $value = $this->castAttribute($key, $value);
+            return $this->castAttribute($key, $value);
         }
 
         // If the attribute is listed as a date, we will convert it to a DateTime
         // instance on retrieval, which makes it quite convenient to work with
         // date fields without having to create a mutator for each property.
-        elseif (in_array($key, $this->getDates())) {
-            if (! is_null($value)) {
-                return $this->asDateTime($value);
-            }
+        if (in_array($key, $this->getDates()) && ! is_null($value)) {
+            return $this->asDateTime($value);
         }
 
         return $value;
@@ -2694,7 +2692,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
                 .'Illuminate\Database\Eloquent\Relations\Relation');
         }
 
-        return $this->relations[$method] = $relations->getResults();
+        $this->setRelation($method, $results = $relations->getResults());
+
+        return $results;
     }
 
     /**
@@ -3082,7 +3082,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @param  string|null  $key
      * @param  mixed  $default
-     * @return array
+     * @return mixed|array
      */
     public function getOriginal($key = null, $default = null)
     {
@@ -3349,7 +3349,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public function getMutatedAttributes()
     {
-        $class = get_class($this);
+        $class = static::class;
 
         if (! isset(static::$mutatorCache[$class])) {
             static::cacheMutatedAttributes($class);
