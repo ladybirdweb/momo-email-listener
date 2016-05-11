@@ -68,6 +68,7 @@ Momo is build using https://github.com/barbushin/php-imap
   <li><a href="https://github.com/laravel/laravel">Laravel Framework</a></li>
   <li><a href="https://github.com/almasaeed2010/AdminLTE">Admin LTE Theme</a></li>
   <li><a href="https://github.com/barbushin/php-imap">PHP IMAP</a></li>
+  <li><a href="https://github.com/PHPMailer/PHPMailer">PHP MAILER</a></li>
 </ul>
 
 <h3>YouTube Channel</h3>
