@@ -7,8 +7,8 @@ php:
 
 # Commands to be run before your environment runs.
 before_script:
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+#  - composer self-update
+#  - composer install --prefer-source --no-interaction --dev
 
 
 # allow_failures: Allow this build to fail under the specified environments.
@@ -20,4 +20,4 @@ matrix:
 # Customize when the notification emails are sent.
 notifications:
     on_success: never
-    on_failure: always
+    on_failure: never
