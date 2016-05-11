@@ -73,7 +73,7 @@
                         <li class="header">EMAIL</li>
                         <li @yield('list')><a href="{!! url('emails') !!}"><i class="fa fa-book"></i> <span>List All</span></a></li>
                         <li @yield('create')><a href="{!! url('emails/create') !!}"><i class="fa fa-book"></i> <span>Create</span></a></li>
-                        <li @yield('diagnos')><a href="{!! url('/diagnos-email') !!}"><i class="fa fa-book"></i> <span>Diagnos</span></a></li>
+                        <li @yield('diagnos')><a href="{!! url('/diagnos-email') !!}"><i class="fa fa-book"></i> <span>Diagnostic</span></a></li>
                         <li class="header">MAILBOX</li>
                         <li @yield('inbox')><a href="{!! url('/') !!}"><i class="fa fa-circle-o text-aqua"></i> <span>Inbox</span></a></li>
                         <li @yield('read')><a href="{!! url('readmails') !!}"><i class="fa fa-circle-o text-aqua"></i> <span>Fetch Mails</span></a></li>
@@ -99,7 +99,7 @@
             </div><!-- /.content-wrapper -->
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 1.0
+                    <b>Version</b> 1.0.1
                 </div>
                 <strong>Copyright &copy; 2016 <a href="https://www.faveohelpdesk.com"><b>FAVEO</b> HELPDESK</a>.</strong> All rights reserved. Powered by <img src="{{asset("lb-faveo/media/images/ladybird.png")}}">
             </footer>

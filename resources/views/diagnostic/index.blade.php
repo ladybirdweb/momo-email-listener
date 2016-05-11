@@ -7,7 +7,7 @@ class="active"
 <!-- header -->
 @section('header')
 <h1>
-    Diagnos Email
+    Email Diagnostic
     <small>Use the following form to test whether your Outgoing Email settings are properly established</small>
 </h1>
 @stop
@@ -16,7 +16,7 @@ class="active"
 @section('breadcrumb')
 <ol class="breadcrumb">
     <li><a href="#">Email</a></li>
-    <li><a href="#">Diagnos</a></li>
+    <li><a href="#">Diagnostic</a></li>
 </ol>
 @stop
 <!-- /breadcrumbs -->

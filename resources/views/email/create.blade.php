@@ -145,7 +145,7 @@ class="active"
                     {!! $errors->first('sending_protocol', '<spam class="help-block">:message</spam>') !!} 
                     <select name="sending_protocol" class="form-control" id="sending_protocol">
                         <option value="smtp">SMTP</option>
-                        <option value="mail">MAIL</option>
+                        <option value="mail">PHP-MAIL</option>
                     </select>
                 </div> 
                 <!-- sending hoost -->

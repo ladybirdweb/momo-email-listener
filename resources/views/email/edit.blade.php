@@ -173,7 +173,7 @@ class="active"
                         if ($emails->sending_protocol == 'mail') {
                             echo 'selected="selected"';
                         }
-                        ?> value="mail">MAIL</option>
+                        ?> value="mail">PHP-MAIL</option>
                     </select>
                 </div> 
 <?php //dd($emails);    ?>
