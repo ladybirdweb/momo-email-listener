@@ -61,7 +61,7 @@ Momo is build using https://github.com/barbushin/php-imap
 	php artisan migrate
 </pre>
 <h6>Or</h6>
-<p>You can directly import the sql dump from DB folder</p>
+<p>You can directly import the sql dump from DB folder in case of servers</p>
 <p>Now you can open the Momo link in your browser</p>
 <h3><a id="user-content-credits" href="https://github.com/ladybirdweb/faveo-helpdesk#credits" aria-hidden="true"></a>Credits</h3>
 <ul>
