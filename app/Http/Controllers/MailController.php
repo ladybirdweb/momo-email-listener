@@ -20,19 +20,20 @@ use PhpImap\Mailbox as ImapMailbox;
  *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class MailController extends Controller {
-
-    public function readmails() {
+class MailController extends Controller
+{
+    public function readmails()
+    {
         // get all the emails
         $emails = Emails::get();
         // fetch each mails by mails
         foreach ($emails as $email) {
             $email_id = $email->email_address;
             $password = Crypt::decrypt($email->password);
-            $protocol = '/' . $email->fetching_protocol;
+            $protocol = '/'.$email->fetching_protocol;
             $host = $email->fetching_host;
             $port = $email->fetching_port;
-            $encryption = '/' . $email->fetching_encryption;
+            $encryption = '/'.$email->fetching_encryption;
             if ($email->mailbox_protocol) {
                 $protocol_value = $e_mail->mailbox_protocol;
                 $get_mailboxprotocol = MailboxProtocol::where('id', '=', $protocol_value)->first();
@@ -42,7 +43,7 @@ class MailController extends Controller {
                 $protocol = $fetching_encryption2;
             } else {
                 if ($email->fetching_protocol) {
-                    $fetching_protocol = '/' . $email->fetching_protocol;
+                    $fetching_protocol = '/'.$email->fetching_protocol;
                 } else {
                     $fetching_protocol = '';
                 }
@@ -51,11 +52,11 @@ class MailController extends Controller {
                 } else {
                     $fetching_encryption = '';
                 }
-                $protocol = $fetching_protocol . $fetching_encryption;
+                $protocol = $fetching_protocol.$fetching_encryption;
             }
-            $mailbox = new ImapMailbox('{' . $host . ':' . $port . $protocol . '}INBOX', $email_id, $password, __DIR__);
+            $mailbox = new ImapMailbox('{'.$host.':'.$port.$protocol.'}INBOX', $email_id, $password, __DIR__);
             // fetch mail by one day previous
-            $mailsIds = $mailbox->searchMailBox('SINCE ' . date('d-M-Y', strtotime('-1 day')));
+            $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
             if (!$mailsIds) {
                 die('Mailbox is empty');
             }
@@ -94,8 +95,8 @@ class MailController extends Controller {
                         $support = 'support';
                         $dir_img_paths = __DIR__;
                         $dir_img_path = explode('/code', $dir_img_paths);
-                        $filepath = explode('..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public', $attachment->filePath);
-                        $path = public_path() . $filepath[1];
+                        $filepath = explode('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public', $attachment->filePath);
+                        $path = public_path().$filepath[1];
                         $filesize = filesize($path);
                         $file_data = file_get_contents($path);
                         $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
@@ -103,7 +104,7 @@ class MailController extends Controller {
                         $string = str_replace('-', '', $attachment->name);
                         $filename = explode('src', $attachment->filePath);
                         $filename = str_replace('\\', '', $filename);
-                        $body = str_replace('cid:' . $imageid, $filepath[1], $body);
+                        $body = str_replace('cid:'.$imageid, $filepath[1], $body);
                         $pos = strpos($body, $filepath[1]);
 
                         if ($pos == false) {
@@ -132,7 +133,6 @@ class MailController extends Controller {
                     $thread->body = $body;
                     $thread->save();
                 } else {
-                    
                 }
             }
         }
@@ -145,7 +145,8 @@ class MailController extends Controller {
      *
      * @return type
      */
-    public function fetch_attachments() {
+    public function fetch_attachments()
+    {
         $uploads = Upload::all();
         foreach ($uploads as $attachment) {
             $image = @imagecreatefromstring($attachment->file);
@@ -153,8 +154,8 @@ class MailController extends Controller {
             imagejpeg($image, null, 80);
             $data = ob_get_contents();
             ob_end_clean();
-            $var = '<a href="" target="_blank"><img src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
-            echo '<br/><span class="mailbox-attachment-icon has-img">' . $var . '</span>';
+            $var = '<a href="" target="_blank"><img src="data:image/jpg;base64,'.base64_encode($data).'"/></a>';
+            echo '<br/><span class="mailbox-attachment-icon has-img">'.$var.'</span>';
         }
     }
 
@@ -165,14 +166,14 @@ class MailController extends Controller {
      *
      * @return type file
      */
-    public function get_data($id) {
+    public function get_data($id)
+    {
         $attachments = Attachment::where('id', '=', $id)->get();
         foreach ($attachments as $attachment) {
-            header('Content-type: application/' . $attachment->type . '');
-            header('Content-Disposition: inline; filename=' . $attachment->name . '');
+            header('Content-type: application/'.$attachment->type.'');
+            header('Content-Disposition: inline; filename='.$attachment->name.'');
             header('Content-Transfer-Encoding: binary');
             echo $attachment->file;
         }
     }
-
 }
