@@ -25,7 +25,8 @@
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link rel="stylesheet" href="{{asset("lb-faveo/css/editor.css")}}" type="text/css">
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
-        {{--jquery ui css --}}
+        {{--jquery
+            ui css --}}
         <link type="text/css" href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet">
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
@@ -86,12 +87,8 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     @yield('header')
-
                     @yield('breadcrumb')
-
-
                 </section>
-
                 <!-- Main content -->
                 <section class="content">
                     @yield('content')          
@@ -139,7 +136,7 @@
         <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
 
         <script>
-            $(function () {
+            $(function() {
                 // Enable iCheck plugin for checkboxes
                 // iCheck for checkbox and radio inputs
                 // $('input[type="checkbox"]').iCheck({
@@ -147,7 +144,7 @@
                 // radioClass: 'iradio_flat-blue'
                 // });
                 // Enable check and uncheck all functionality
-                $(".checkbox-toggle").click(function () {
+                $(".checkbox-toggle").click(function() {
                     var clicks = $(this).data('clicks');
                     if (clicks) {
                         //Uncheck all checkboxes
@@ -160,7 +157,7 @@
                 });
 
                 //Handle starring for glyphicon and font awesome
-                $(".mailbox-star").click(function (e) {
+                $(".mailbox-star").click(function(e) {
                     e.preventDefault();
                     //detect type
                     var $this = $(this).find("a > i");
@@ -203,7 +200,7 @@
         });
     </script>
     <script>
-        $(function () {
+        $(function() {
             $("#example1").DataTable();
             $('#example2').DataTable({
                 "paging": true,
