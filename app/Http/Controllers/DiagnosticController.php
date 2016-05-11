@@ -66,7 +66,7 @@ class DiagnosticController extends Controller {
                 $mail->Port = $email_details->sending_port;                                    // TCP port to connect to
 
                 $mail->setFrom($email_details->email_address, $email_details->email_name);
-                $mail->addAddress($email_details->email_address, $email_details->email_name);     // Add a recipient
+                $mail->addAddress($request->to, '');     // Add a recipient
 //                $mail->addCC('cc@example.com');
 //                $mail->addBCC('bcc@example.com');
 //                $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
