@@ -19,8 +19,8 @@ use Illuminate\Http\Request;
  *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class EmailsController extends Controller {
-
+class EmailsController extends Controller
+{
     /**
      * Display a listing of the Emails.
      *
@@ -28,7 +28,8 @@ class EmailsController extends Controller {
      *
      * @return type view
      */
-    public function index(Emails $email) {
+    public function index(Emails $email)
+    {
         try {
             // fetch all the emails from emails table
             $emails = $email->get();
@@ -44,7 +45,8 @@ class EmailsController extends Controller {
      *
      * @return type Response
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('email.create');
         } catch (Exception $e) {
@@ -60,16 +62,17 @@ class EmailsController extends Controller {
      *
      * @return int
      */
-    public function validatingEmailSettings(Request $request) {
+    public function validatingEmailSettings(Request $request)
+    {
         $validator = \Validator::make(
                         [
                     'email_address' => $request->email_address,
-                    'email_name' => $request->email_name,
-                    'password' => $request->password,
+                    'email_name'    => $request->email_name,
+                    'password'      => $request->password,
                         ], [
                     'email_address' => 'required|email|unique:emails',
-                    'email_name' => 'required',
-                    'password' => 'required',
+                    'email_name'    => 'required',
+                    'password'      => 'required',
                         ]
         );
         if ($validator->fails()) {
@@ -128,6 +131,7 @@ class EmailsController extends Controller {
                 $return = 1;
             }
         }
+
         return $return;
     }
 
@@ -139,7 +143,8 @@ class EmailsController extends Controller {
      *
      * @return type Redirect
      */
-    public function store($request, $imap_check) {
+    public function store($request, $imap_check)
+    {
         $email = new Emails();
         try {
             // saving all the fields to the database
@@ -193,15 +198,16 @@ class EmailsController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, Emails $email) {
+    public function edit($id, Emails $email)
+    {
         try {
             // fetch the selected emails
             $emails = $email->whereId($id)->first();
             // get all the departments
 //            $departments = $department->get();
-            $departments = "";
-            $priority = "";
-            $helps = "";
+            $departments = '';
+            $priority = '';
+            $helps = '';
             // get all the helptopic
 //            $helps = $help->get();
             // get all the priority
@@ -223,16 +229,17 @@ class EmailsController extends Controller {
      *
      * @return int
      */
-    public function validatingEmailSettingsUpdate($id, Request $request) {
+    public function validatingEmailSettingsUpdate($id, Request $request)
+    {
         $validator = \Validator::make(
                         [
                     'email_address' => $request->email_address,
-                    'email_name' => $request->email_name,
-                    'password' => $request->password,
+                    'email_name'    => $request->email_name,
+                    'password'      => $request->password,
                         ], [
                     'email_address' => 'email',
-                    'email_name' => 'required',
-                    'password' => 'required',
+                    'email_name'    => 'required',
+                    'password'      => 'required',
                         ]
         );
         if ($validator->fails()) {
@@ -306,7 +313,8 @@ class EmailsController extends Controller {
      *
      * @return type Response
      */
-    public function update($id, $request, $imap_check) {
+    public function update($id, $request, $imap_check)
+    {
         // try {
         // dd($id);
         // dd($request);
@@ -340,6 +348,7 @@ class EmailsController extends Controller {
         $emails->save();
         // returns success message for successful email update
         $return = 1;
+
         return $return;
     }
 
@@ -351,7 +360,8 @@ class EmailsController extends Controller {
      *
      * @return type Redirect
      */
-    public function destroy($id, Emails $email) {
+    public function destroy($id, Emails $email)
+    {
         try {
             // fetching the database instance of the current email
             $emails = $email->whereId($id)->first();
@@ -372,7 +382,8 @@ class EmailsController extends Controller {
      *
      * @return type
      */
-    public function inbox() {
+    public function inbox()
+    {
         if (\Schema::hasTable('emails')) {
             return view('mailbox.inbox');
         } else {
@@ -387,7 +398,8 @@ class EmailsController extends Controller {
      *
      * @return type view
      */
-    public function fetchmail($id) {
+    public function fetchmail($id)
+    {
         return view('mailbox.readmail', compact('id'));
     }
 
@@ -398,25 +410,26 @@ class EmailsController extends Controller {
      *
      * @return type int
      */
-    public function getImapStream($request, $validate) {
+    public function getImapStream($request, $validate)
+    {
         $fetching_status = $request->input('fetching_status');
         $username = $request->input('email_address');
         $password = $request->input('password');
         $protocol_id = $request->input('mailbox_protocol');
-        $fetching_protocol = '/' . $request->input('fetching_protocol');
-        $fetching_encryption = '/' . $request->input('fetching_encryption');
+        $fetching_protocol = '/'.$request->input('fetching_protocol');
+        $fetching_encryption = '/'.$request->input('fetching_encryption');
         if ($fetching_encryption == '/none') {
             $fetching_encryption2 = '/novalidate-cert';
             $mailbox_protocol = $fetching_encryption2;
             $host = $request->input('fetching_host');
             $port = $request->input('fetching_port');
-            $mailbox = '{' . $host . ':' . $port . $mailbox_protocol . '}INBOX';
+            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.'}INBOX';
         } else {
-            $mailbox_protocol = $fetching_protocol . $fetching_encryption;
+            $mailbox_protocol = $fetching_protocol.$fetching_encryption;
             $host = $request->input('fetching_host');
             $port = $request->input('fetching_port');
-            $mailbox = '{' . $host . ':' . $port . $mailbox_protocol . $validate . '}INBOX';
-            $mailbox_protocol = $fetching_encryption . $validate;
+            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.$validate.'}INBOX';
+            $mailbox_protocol = $fetching_encryption.$validate;
         }
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
@@ -440,7 +453,8 @@ class EmailsController extends Controller {
      *
      * @return type int
      */
-    public function checkImapStream($imap_stream) {
+    public function checkImapStream($imap_stream)
+    {
         $check_imap_stream = imap_check($imap_stream);
         if ($check_imap_stream) {
             $imap_stream = 1;
@@ -458,7 +472,8 @@ class EmailsController extends Controller {
      *
      * @return int
      */
-    public function getSmtp($request) {
+    public function getSmtp($request)
+    {
         $sending_status = $request->input('sending_status');
         // cheking for the sending protocol
         if ($request->input('sending_protocol') == 'smtp') {
@@ -479,6 +494,7 @@ class EmailsController extends Controller {
         } elseif ($request->input('sending_protocol') == 'mail') {
             $return = 1;
         }
+
         return $return;
 
 //
@@ -510,5 +526,4 @@ class EmailsController extends Controller {
 //        }
 //        return $return;
     }
-
 }
