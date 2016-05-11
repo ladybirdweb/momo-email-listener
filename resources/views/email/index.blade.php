@@ -31,7 +31,6 @@ class="active"
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <i class="fa  fa-check-circle"></i>
-            <b>Success!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('success')}}
         </div>

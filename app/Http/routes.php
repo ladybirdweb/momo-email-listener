@@ -31,13 +31,14 @@ Route::get('/layout', function () {
  */
 
 Route::group(['middleware' => ['web']], function () {
-
     Route::resource('emails', 'EmailsController'); // in emails module, for CRUD
     Route::get('/', ['as' => 'home', 'uses' => 'EmailsController@inbox']); // in emails module, for CRUD
     Route::get('/readmail/{id}', 'EmailsController@fetchmail'); // in emails module, for CRUD
     Route::get('/readmails', 'MailController@readmails'); // in emails module, for CRUD
     Route::get('image/{id}', ['as' => 'image', 'uses' => 'MailController@get_data']); /* get image */
     Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'EmailsController@validatingEmailSettings']);
+    Route::get('/diagnos-email', ['as' => 'diag.email', 'uses' => 'DiagnosticController@getDiag']);
+    Route::post('/diagnos-email-post', ['as' => 'post.diag.email', 'uses' => 'DiagnosticController@postDiag']);
 });
 
 Route::PUT('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
