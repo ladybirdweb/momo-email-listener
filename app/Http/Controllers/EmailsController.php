@@ -107,7 +107,6 @@ class EmailsController extends Controller {
             $smtp_check = 0;
             $need_to_check_smtp = 0;
         }
-
         if ($need_to_check_imap == 1 && $need_to_check_smtp == 1) {
             if ($imap_check != 0 && $smtp_check != 0) {
                 $this->store($request, $imap_check[1]);
@@ -129,7 +128,6 @@ class EmailsController extends Controller {
                 $return = 1;
             }
         }
-
         return $return;
     }
 
@@ -142,12 +140,13 @@ class EmailsController extends Controller {
      * @return type Redirect
      */
     public function store($request, $imap_check) {
-        //        dd($request);
         $email = new Emails();
         try {
-            //            getConnection($request->input('email_name'), $request->input('email_address'), $request->input('email_address'))
             // saving all the fields to the database
-            if ($email->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'fetching_encryption', 'sending_status', 'auto_response'))->save() == true) {
+            if ($email->fill($request->except('password', 'fetching_status', 'fetching_encryption', 'sending_status', 'auto_response'))->save() == true) {
+                if ($request->input('password')) {
+                    $email->password = Crypt::encrypt($request->input('password'));
+                }
                 if ($request->fetching_status == 'on') {
                     $email->fetching_status = 1;
                 } else {
@@ -168,30 +167,16 @@ class EmailsController extends Controller {
                 } else {
                     $email->fetching_encryption = $request->fetching_encryption;
                 }
-                // fetching department value
-                $email->department = $this->departmentValue($request->input('department'));
-                // fetching priority value
-                $email->priority = $this->priorityValue($request->input('priority'));
-                // fetching helptopic value
-                $email->help_topic = $this->helpTopicValue($request->input('help_topic'));
                 // inserting the encrypted value of password
-                $email->password = Crypt::encrypt($request->input('password'));
                 $email->save(); // run save
-                // Creating a default system email as the first email is inserted to the system
-                $email_settings = Email::where('id', '=', '1')->first();
-                $email_settings->sys_email = $email->id;
-                $email_settings->save();
                 // returns success message for successful email creation
-//                return redirect('emails')->with('success', 'Email Created sucessfully');
                 return 1;
             } else {
                 // returns fail message for unsuccessful save execution
-//                return redirect('emails')->with('fails', 'Email can not Create');
                 return 0;
             }
         } catch (Exception $e) {
             // returns if try fails
-//            return redirect()->back()->with('fails', $e->getMessage());
             return 0;
         }
     }
@@ -208,20 +193,23 @@ class EmailsController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol) {
+    public function edit($id, Emails $email) {
         try {
             // fetch the selected emails
             $emails = $email->whereId($id)->first();
             // get all the departments
-            $departments = $department->get();
+//            $departments = $department->get();
+            $departments = "";
+            $priority = "";
+            $helps = "";
             // get all the helptopic
-            $helps = $help->get();
+//            $helps = $help->get();
             // get all the priority
-            $priority = $ticket_priority->get();
+//            $priority = $ticket_priority->get();
             // get all the mailbox protocols
-            $mailbox_protocols = $mailbox_protocol->get();
+//            $mailbox_protocols = $mailbox_protocol->get();
             // return if the execution is succeeded
-            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails'));
+            return view('email.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails'));
         } catch (Exception $e) {
             // return if try fails
             return redirect()->back()->with('fails', $e->getMessage());
@@ -347,22 +335,11 @@ class EmailsController extends Controller {
         } else {
             $emails->fetching_encryption = $request->fetching_encryption;
         }
-        // dd($email->fetching_encryption);
-        // fetching department value
-        $emails->department = $this->departmentValue($request->input('department'));
-        // fetching priority value
-        $emails->priority = $this->priorityValue($request->input('priority'));
-        // fetching helptopic value
-        $emails->help_topic = $this->helpTopicValue($request->input('help_topic'));
         // inserting the encrypted value of password
         $emails->password = Crypt::encrypt($request->input('password'));
         $emails->save();
         // returns success message for successful email update
         $return = 1;
-        // } catch (Exception $e) {
-        //     // returns if try fails
-        //     $return = $e->getMessage();
-        // }
         return $return;
     }
 
@@ -483,21 +460,55 @@ class EmailsController extends Controller {
      */
     public function getSmtp($request) {
         $sending_status = $request->input('sending_status');
-        $mail = new \PHPMailer();
-        $mail->isSMTP();
-        $mail->Host = $request->input('sending_host');
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = $request->input('email_address');
-        $mail->Password = $request->input('password');
-        $mail->SMTPSecure = $request->input('sending_encryption');
-        $mail->Port = $request->input('sending_port');
-        if ($mail->smtpConnect() == true) {
-            $mail->smtpClose();
+        // cheking for the sending protocol
+        if ($request->input('sending_protocol') == 'smtp') {
+            $mail = new \PHPMailer();
+            $mail->isSMTP();
+            $mail->Host = $request->input('sending_host');            // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                                   // Enable SMTP authentication
+            $mail->Username = $request->input('email_address');       // SMTP username
+            $mail->Password = $request->input('password');            // SMTP password
+            $mail->SMTPSecure = $request->input('sending_encryption'); // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = $request->input('sending_port');            // TCP port to connect to
+            if ($mail->smtpConnect() == true) {
+                $mail->smtpClose();
+                $return = 1;
+            } else {
+                $return = 0;
+            }
+        } elseif ($request->input('sending_protocol') == 'mail') {
             $return = 1;
-        } else {
-            $return = 0;
         }
         return $return;
+
+//
+//        $mail = new \PHPMailer();
+//        $mail->IsSendmail(true);
+//        //$mail->Host = $request->input('sending_host');
+//        //$mail->SMTPAuth = true;                               // Enable SMTP authentication
+//        //$mail->Username = $request->input('email_address');
+//        //$mail->Password = $request->input('password');
+//        //$mail->SMTPSecure = $request->input('sending_encryption');
+//        //$mail->Port = $request->input('sending_port');
+//
+//        $mail->AddReplyTo("info@jamboreebliss.com", "jamboree");
+//        $mail->SetFrom('info@jamboreebliss.com', 'jamboree');
+//        $mail->AddReplyTo("info@jamboreebliss.com", "jamboree");
+//
+//        $mail->addAddress('sujitprasad4567@gmail.com', 'sujitprasad');
+//
+//        $mail->Subject = "PHPMailer Test Subject via Sendmail, basic";
+//        $mail->Subject = "PHPMailer Test Subject via Sendmail, basic";
+//        $mail->MsgHTML("ikjsanclkjsdnkjlsdnckjlsdnjcksdnjlcksdcj");
+//
+//        $mail->send();
+//        if (!$mail->send()) {
+//            //$mail->smtpClose();
+//            $return = 1;
+//        } else {
+//            $return = 0;
+//        }
+//        return $return;
     }
 
 }

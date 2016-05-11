@@ -56,7 +56,7 @@ class="active"
                 </div>
                 <!-- password -->
                 <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
-                    <label>password</label>
+                    <label>Password</label>
                     {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                     <input type="password" name="password" class='form-control'  id='password'>
                 </div>
@@ -76,7 +76,7 @@ class="active"
                     <div class="col-xs-2 form-group">
                         <input type="checkbox" name="fetching_status" id="fetching_status"> Enable
                     </div>
-                    
+
                 </div>
             </div>
             <div class="row">
@@ -180,11 +180,10 @@ class="active"
                 </div>
                 <div class="col-xs-2 form-group">
                     <br/>
-                    <input type="checkbox" name="smtp_validate" value="/novalidate-cert" id="smtp_validate">&nbsp; Validate certificates from TLS/SSL server
+                    <!--<input type="checkbox" name="smtp_validate" value="/novalidate-cert" id="smtp_validate">&nbsp; Validate certificates from TLS/SSL server-->
                 </div>
             </div>
         </div>
-
         <div class="box-footer">
             <button class="btn btn-primary" type="submit"> Submit</button>
         </div>
@@ -230,10 +229,10 @@ class="active"
 //        $("#primary"+id).addClass("btn-primary");
 //        $("#defalut"+id).removeClass("btn-primary");
 //    }
-    
-    
+
+
     //submit form
-    $('#form').on('submit', function () {
+    $('#form').on('submit', function() {
         var form_data = $(this).serialize();
         $("#spin").addClass("fa-spin");
         var email_address = document.getElementById('email_address').value;
@@ -250,9 +249,9 @@ class="active"
         var sending_host = document.getElementById('sending_host').value;
         var sending_port = document.getElementById('sending_port').value;
         var sending_encryption = document.getElementById('sending_encryption').value;
-        var sending_authentication = document.getElementById('smtp_authentication').value;
+//        var sending_authentication = document.getElementById('smtp_authentication').value;
 //        var fetching_validate = $('input#validate[type="checkbox"]:checked', this).val();
-        
+
         var filter_number = /^([0-9])/;
         var error_list = [];
         var error = "";
@@ -275,7 +274,7 @@ class="active"
             error_list.push(error);
             $("#email_name_error").addClass("has-error");
         }
-       
+
         // checking for validation of password
         if (password == "") {
             var error = "Password is a required field";
@@ -320,29 +319,31 @@ class="active"
         }
         // checking for validation of sending status
         if (sending_status == 'on') {
-            // checking for validation of sending host
-            if (sending_host == "") {
-                var error = "Sending Host is a required field";
-                error_list.push(error);
-                $("#sending_host_error").addClass("has-error");
-            }
-            // checking for validation of sending port
-            if (sending_port == "") {
-                var error = "Sending Port is a required field";
-                error_list.push(error);
-                $("#sending_port_error").addClass("has-error");
-            }
-            // checking for validation of sending encryption
-            if (sending_encryption == "") {
-                var error = "Sending Encryption is a required field";
-                error_list.push(error);
-                $("#sending_encryption_error").addClass("has-error");
-            }
-            // checking for validation of sending protocol
-            if (sending_protocol == "") {
-                var error = "Transfer Protocol is a required field";
-                error_list.push(error);
-                $("#sending_protocol_error").addClass("has-error");
+            if (sending_protocol == 'smtp') {
+                // checking for validation of sending host
+                if (sending_host == "") {
+                    var error = "Sending Host is a required field";
+                    error_list.push(error);
+                    $("#sending_host_error").addClass("has-error");
+                }
+                // checking for validation of sending port
+                if (sending_port == "") {
+                    var error = "Sending Port is a required field";
+                    error_list.push(error);
+                    $("#sending_port_error").addClass("has-error");
+                }
+                // checking for validation of sending encryption
+                if (sending_encryption == "") {
+                    var error = "Sending Encryption is a required field";
+                    error_list.push(error);
+                    $("#sending_encryption_error").addClass("has-error");
+                }
+                // checking for validation of sending protocol
+                if (sending_protocol == "") {
+                    var error = "Transfer Protocol is a required field";
+                    error_list.push(error);
+                    $("#sending_protocol_error").addClass("has-error");
+                }
             }
         } else {
             // checking for validation of fetching port
@@ -357,7 +358,7 @@ class="active"
         // executing error chatch
         if (error) {
             var ssss = "";
-            $.each(error_list, function (key, value) {
+            $.each(error_list, function(key, value) {
                 ssss += "<li class='error-message-padding'>" + value + "</li>";
             });
             if (ssss) {
@@ -378,11 +379,11 @@ class="active"
             headers: {
                 'X-CSRF-Token': $('meta[name="_token"]').attr('content')
             },
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#alert').empty();
                 $("#click").trigger("click");
             },
-            success: function (response) {
+            success: function(response) {
                 if (response == 1) {
                     $("#close").trigger("click");
                     var error_result = "<div class='alert alert-success alert-dismissable'> <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Your details saved successfully</div></div>";
@@ -395,7 +396,7 @@ class="active"
                     $('#alert').show();
                 }
             },
-            error: function (response) {
+            error: function(response) {
                 $("#close").trigger("click");
                 var errorsHtml = "<div class='alert alert-danger alert-dismissable'> <i class='fa fa-ban'> </i> <b> Alert!</b><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Unable to process the details </div></div>";
                 $('#alert').empty();

@@ -62,39 +62,177 @@ class="active"
         </div>
         <div class="box-body">
             <div class="row">
-                <div class="col-xs-3 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
+                <div class="form-group">
+                    <!-- status -->
+                    <div class="col-xs-2 form-group">
+                        <label>Fetching Status</label>
+                    </div>
+                    <div class="col-xs-2 form-group">
+                        <input type="checkbox" name="fetching_status" id="fetching_status" <?php
+                        if ($emails->fetching_status == '1') {
+                            echo 'checked="checked"';
+                        }
+                        ?> > Enable
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
                     <label>Fetching Protocol</label>
                     <!-- <input type="text" name="fetching_protocol" class='form-control'  id='fetching_protocol' value="{!! $emails->fetching_protocol !!}"> -->
                     <select name="fetching_protocol" class='form-control'  id='fetching_protocol'>
-                        <option value="imap">IMAP</option>
+                        <option <?php
+                        if ($emails->fetching_protocol == 'imap') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="imap">IMAP</option>
+                        <option <?php
+                        if ($emails->fetching_protocol == 'pop') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="pop">POP3</option>
                     </select>
                 </div>
-                <div class="col-xs-3 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
+                <div class="col-xs-2 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
                     <label>Fetching Host</label>
                     <input type="text" name="fetching_host" class='form-control'  id='fetching_host' value="{!! $emails->fetching_host !!}">
                 </div>
-                <div class="col-xs-3 form-group {!! $errors->has('fetching_port') ? 'has-error' : ''!!}" id="fetching_port_error">
+                <div class="col-xs-2 form-group {!! $errors->has('fetching_port') ? 'has-error' : ''!!}" id="fetching_port_error">
                     <label>Fetching Port</label>
                     <input type="text" name="fetching_port" class='form-control'  id='fetching_port' value="{!! $emails->fetching_port !!}">
                 </div>
-                <div class="col-xs-3 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
+                <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                     <label>Fetching Encryption</label>
                     <!-- <input type="text" name="fetching_encryption" class='form-control'  id='fetching_encryption' value="{!! $emails->fetching_encryption !!}"> -->
                     <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
-                        <option @if($emails->fetching_encryption == 'none') {!! 'selected="selected"' !!} @endif value="none">None</option>
-                        <option @if($emails->fetching_encryption == 'ssl') {!! 'selected="selected"' !!} @endif value="ssl">SSL</option>
-                        <option @if($emails->fetching_encryption == 'tls') {!! 'selected="selected"' !!} @endif value="tls">TLS</option>
-                        <option @if($emails->fetching_encryption == 'ssl/no-validate') {!! 'selected="selected"' !!} @endif value="ssl/no-validate">SSL (Accept all certificates)</option>
-                        <option @if($emails->fetching_encryption == 'tls/no-validate') {!! 'selected="selected"' !!} @endif value="tls/no-validate">TLS (Accept all certificates)</option>
+                        <option value=""> -----Select----- </option>
+                        <option <?php
+                        if ($emails->fetching_encryption == 'none') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="none">None</option>
+                        <option <?php
+                        if ($emails->fetching_encryption == '/ssl/novalidate-cert' || $emails->fetching_encryption === '/ssl/validate-cert') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="ssl">SSL</option>
+                        <option <?php
+                        if ($emails->fetching_encryption == '/tls/novalidate-cert' || $emails->fetching_encryption === '/tls/validate-cert') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="tls">TLS</option>
+                        <option <?php
+                        if ($emails->fetching_encryption == '/starttls/novalidate-cert' || $emails->fetching_encryption === '/starttls/validate-cert') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="starttls">STARTTLS</option>
                     </select>
+                </div>
+                <div class="col-xs-2">
+                    <label>Authentication</label>
+                    <select name="imap_authentication" class="form-control" id="imap_authentication">
+                        <option value="normal">Normal Password</option>
+                    </select>
+                </div>
+                <div class="col-xs-2 form-group">                   
+                    <br/>
+                    <input type="checkbox" name="imap_validate" value="/novalidate-cert" id="imap_validate">&nbsp; Validate certificates from TLS/SSL server
                 </div>
             </div>
         </div>    
+        <div class="box-header with-border">
+            <h3 class="box-title">Outgoing Email Information</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <!-- status -->
+                <div class="form-group">
+                    <div class="col-xs-2 form-group"> 
+                        <label>Sending Status</label>
+                    </div> 
+                    <div class="col-xs-2 form-group"> 
+                        <input type="checkbox" name="sending_status" id="sending_status" <?php if ($emails->sending_status == '1') {
+                            echo 'checked="checked"';
+                        } ?> > Enable
+                    </div> 
+                </div>
+            </div>
+            <div class="row">
+                <!-- Encryption -->
+                <div class="col-xs-2 form-group {!! $errors->has('sending_protocol') ? 'has-error' : ''!!}" id="sending_protocol_error">
+                    <label>Sending Protocol</label>
+                    {!! $errors->first('sending_protocol', '<spam class="help-block">:message</spam>') !!} 
+                    <select name="sending_protocol" class="form-control" id="sending_protocol">
+                        <option <?php
+                        if ($emails->sending_protocol == 'smtp') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="smtp">SMTP</option>
+                        <option <?php
+                        if ($emails->sending_protocol == 'mail') {
+                            echo 'selected="selected"';
+                        }
+                        ?> value="mail">MAIL</option>
+                    </select>
+                </div> 
+<?php //dd($emails);    ?>
+                <!-- sending hoost -->
+                <div class="col-xs-2 form-group {!! $errors->has('sending_host') ? 'has-error' : ''!!}" id="sending_host_error">
+                    <label>Sending Host</label>
+                    {!! $errors->first('sending_host', '<spam class="help-block">:message</spam>') !!} 
+                    <input type="text" name="sending_host" class="form-control" id="sending_host" value="{!! $emails->sending_host !!}">
+                </div> 
+                <!-- sending port -->
+                <div class="col-xs-2 form-group {!! $errors->has('sending_port') ? 'has-error' : ''!!}" id="sending_port_error">
+                    <label>Sending Port</label>
+                    {!! $errors->first('sending_port', '<spam class="help-block">:message</spam>') !!}
+                    <input type="text" name="sending_port" class="form-control" id="sending_port"  value="{!! $emails->sending_port !!}">
+                </div>
+                <!-- Encryption -->
+                <div class="col-xs-2 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
+                    <label>Sending Encryption</label>
+                    {!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
+                    <select name="sending_encryption" class="form-control" id="sending_encryption">
+                        <option value="">-----Select-----</option>
+                        <option <?php
+if ($emails->sending_encryption == 'none') {
+    echo 'selected="selected"';
+}
+?> value="none">None</option>
+                        <option <?php
+                        if ($emails->sending_encryption == 'ssl') {
+                            echo 'selected="selected"';
+                        }
+?> value="ssl">SSL</option>
+                        <option <?php
+                        if ($emails->sending_encryption == 'tls') {
+                            echo 'selected="selected"';
+                        }
+?> value="tls">TLS</option>
+                        <option <?php
+                        if ($emails->sending_encryption == 'starttls') {
+                            echo 'selected="selected"';
+                        }
+?> value="starttls">STARTTLS</option>
+                    </select>
+                </div>
+                <div class="col-xs-2">
+                    <label>Authentication</label>
+                    <select name="smtp_authentication" class="form-control" id="smtp_authentication">
+                        <option value="normal">Normal Password</option>
+                    </select>
+                </div>
+                <div class="col-xs-2 form-group">
+                    <br/>
+                    <!--<input type="checkbox" name="smtp_validate" value="/novalidate-cert" id="smtp_validate">&nbsp; Validate certificates from TLS/SSL server-->
+                </div>
+            </div>
+        </div>
         <div class="box-footer">
             <button class="btn btn-primary"> Submit</button>
         </div>
     </div>
-
 
     <div class="modal fade" id="loadingpopup" style="padding:200px;">
         <div class="modal-dialog">
@@ -120,17 +258,23 @@ class="active"
     <button style="display:none" data-toggle="modal" data-target="#loadingpopup" id="click"></button>
 
     <script type="text/javascript">
-        //submit form
-        $('#form').on('submit', function () {
+//submit form
+        $('#form').on('submit', function() {
             var form_data = $(this).serialize();
-            // $("#spin").addClass("fa-spin");
+            $("#spin").addClass("fa-spin");
             var email_address = document.getElementById('email_address').value;
             var email_name = document.getElementById('email_name').value;
             var password = document.getElementById('password').value;
+            var fetching_status = $('input#fetching_status[type="checkbox"]:checked', this).val();
             var fetching_protocol = document.getElementById('fetching_protocol').value;
             var fetching_host = document.getElementById('fetching_host').value;
             var fetching_port = document.getElementById('fetching_port').value;
             var fetching_encryption = document.getElementById('fetching_encryption').value;
+            var sending_status = $('input#sending_status[type="checkbox"]:checked', this).val();
+            var sending_protocol = document.getElementById('sending_protocol').value;
+            var sending_host = document.getElementById('sending_host').value;
+            var sending_port = document.getElementById('sending_port').value;
+            var sending_encryption = document.getElementById('sending_encryption').value;
 
             var filter_number = /^([0-9])/;
             var error_list = [];
@@ -161,35 +305,83 @@ class="active"
                 error_list.push(error);
                 $("#password_error").addClass("has-error");
             }
-
-            if (fetching_host == "") {
-                var error = "Fetching Host is a required field";
-                error_list.push(error);
-                $("#fetching_host_error").addClass("has-error");
+            // checking for validation of fetching host
+            if (fetching_status == 'on') {
+                if (fetching_host == "") {
+                    var error = "Fetching Host is a required field";
+                    error_list.push(error);
+                    $("#fetching_host_error").addClass("has-error");
+                }
+                // checking for validation of fetching port
+                if (fetching_port == "") {
+                    var error = "Fetching Port is a required field";
+                    error_list.push(error);
+                    $("#fetching_port_error").addClass("has-error");
+                }
+                // checking for validation of mailbox protocol
+                if (fetching_encryption == "") {
+                    var error = "Fetching Encryption is a required field";
+                    error_list.push(error);
+                    $("#fetching_encryption_error").addClass("has-error");
+                }
+                // checking for validation of mailbox protocol
+                if (fetching_protocol == "") {
+                    var error = "Fetching Protocol is a required field";
+                    error_list.push(error);
+                    $("#fetching_protocol_error").addClass("has-error");
+                }
+            } else {
+                // checking for validation of fetching port
+                if (fetching_port) {
+                    if (!filter_number.test(fetching_port)) {
+                        var error = "The Fetching Port Number must be an integer";
+                        error_list.push(error);
+                        $("#fetching_port_error").addClass("has-error");
+                    }
+                }
             }
-            // checking for validation of fetching port
-            if (fetching_port == "") {
-                var error = "Fetching Port is a required field";
-                error_list.push(error);
-                $("#fetching_port_error").addClass("has-error");
+            // checking for validation of sending status
+            if (sending_status == 'on') {
+                if (sending_protocol == 'smtp') {
+                    // checking for validation of sending host
+                    if (sending_host == "") {
+                        var error = "Sending Host is a required field";
+                        error_list.push(error);
+                        $("#sending_host_error").addClass("has-error");
+                    }
+                    // checking for validation of sending port
+                    if (sending_port == "") {
+                        var error = "Sending Port is a required field";
+                        error_list.push(error);
+                        $("#sending_port_error").addClass("has-error");
+                    }
+                    // checking for validation of sending encryption
+                    if (sending_encryption == "") {
+                        var error = "Sending Encryption is a required field";
+                        error_list.push(error);
+                        $("#sending_encryption_error").addClass("has-error");
+                    }
+                    // checking for validation of sending protocol
+                    if (sending_protocol == "") {
+                        var error = "Transfer Protocol is a required field";
+                        error_list.push(error);
+                        $("#sending_protocol_error").addClass("has-error");
+                    }
+                }
+            } else {
+                // checking for validation of fetching port
+                if (sending_port) {
+                    if (!filter_number.test(sending_port)) {
+                        var error = "The Sending Port Number must be an integer";
+                        error_list.push(error);
+                        $("#sending_port_error").addClass("has-error");
+                    }
+                }
             }
-            // checking for validation of mailbox protocol
-            if (fetching_encryption == "") {
-                var error = "Fetching Encryption is a required field";
-                error_list.push(error);
-                $("#fetching_encryption_error").addClass("has-error");
-            }
-            // checking for validation of mailbox protocol
-            if (fetching_protocol == "") {
-                var error = "Fetching Protocol is a required field";
-                error_list.push(error);
-                $("#fetching_protocol_error").addClass("has-error");
-            }
-
             // executing error chatch
             if (error) {
                 var ssss = "";
-                $.each(error_list, function (key, value) {
+                $.each(error_list, function(key, value) {
                     ssss += "<li class='error-message-padding'>" + value + "</li>";
                 });
                 if (ssss) {
@@ -201,7 +393,6 @@ class="active"
                     return false;
                 }
             }
-
 // Ajax communicating to backend for further Checking/Saving the details
             $.ajax({
                 type: "POST",
@@ -211,12 +402,11 @@ class="active"
                 headers: {
                     'X-CSRF-Token': $('meta[name="_token"]').attr('content')
                 },
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#alert').empty();
                     $("#click").trigger("click");
-
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response == 1) {
                         $("#close").trigger("click");
                         var error_result = "<div class='alert alert-success alert-dismissable'> <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Your details saved successfully</div></div>";
@@ -228,18 +418,18 @@ class="active"
                         $('#alert').html(error_result);
                         $('#alert').show();
                     }
-                },
-                error: function (response) {
-                    $("#close").trigger("click");
-                    var errorsHtml = "<div class='alert alert-danger alert-dismissable'> <i class='fa fa-ban'> </i> <b> Alert!</b><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Unable to process the details </div></div>";
-                    $('#alert').empty();
-                    $('#alert').html(errorsHtml);
-                    $('#alert').show();
-                    return false;
                 }
+//            ,
+//            error: function (response) {
+//                $("#close").trigger("click");
+//                var errorsHtml = "<div class='alert alert-danger alert-dismissable'> <i class='fa fa-ban'> </i> <b> Alert!</b><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Unable to process the details </div></div>";
+//                $('#alert').empty();
+//                $('#alert').html(errorsHtml);
+//                $('#alert').show();
+//                return false;
+//            }
             });
             return false;
         });
-
     </script>
     @stop
