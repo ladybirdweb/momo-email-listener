@@ -79,7 +79,7 @@ class="active"
             </div>
             <div class="row">
                 <div class="col-xs-2 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
-                    <label>Fetching Protocol</label>
+                    <label> Protocol</label>
                     <!-- <input type="text" name="fetching_protocol" class='form-control'  id='fetching_protocol' value="{!! $emails->fetching_protocol !!}"> -->
                     <select name="fetching_protocol" class='form-control'  id='fetching_protocol'>
                         <option <?php
@@ -95,15 +95,15 @@ class="active"
                     </select>
                 </div>
                 <div class="col-xs-2 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
-                    <label>Fetching Host</label>
+                    <label> Host</label>
                     <input type="text" name="fetching_host" class='form-control'  id='fetching_host' value="{!! $emails->fetching_host !!}">
                 </div>
                 <div class="col-xs-2 form-group {!! $errors->has('fetching_port') ? 'has-error' : ''!!}" id="fetching_port_error">
-                    <label>Fetching Port</label>
+                    <label> Port</label>
                     <input type="text" name="fetching_port" class='form-control'  id='fetching_port' value="{!! $emails->fetching_port !!}">
                 </div>
                 <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
-                    <label>Fetching Encryption</label>
+                    <label> Encryption</label>
                     <!-- <input type="text" name="fetching_encryption" class='form-control'  id='fetching_encryption' value="{!! $emails->fetching_encryption !!}"> -->
                     <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
                         <option value=""> -----Select----- </option>
@@ -149,7 +149,7 @@ class="active"
                 <!-- status -->
                 <div class="form-group">
                     <div class="col-xs-2 form-group"> 
-                        <label>Sending Status</label>
+                        <label> Status</label>
                     </div> 
                     <div class="col-xs-2 form-group"> 
                         <input type="checkbox" name="sending_status" id="sending_status" <?php if ($emails->sending_status == '1') {
@@ -161,7 +161,7 @@ class="active"
             <div class="row">
                 <!-- Encryption -->
                 <div class="col-xs-2 form-group {!! $errors->has('sending_protocol') ? 'has-error' : ''!!}" id="sending_protocol_error">
-                    <label>Sending Protocol</label>
+                    <label> Protocol</label>
                     {!! $errors->first('sending_protocol', '<spam class="help-block">:message</spam>') !!} 
                     <select name="sending_protocol" class="form-control" id="sending_protocol">
                         <option <?php
@@ -179,19 +179,19 @@ class="active"
 <?php //dd($emails);    ?>
                 <!-- sending hoost -->
                 <div class="col-xs-2 form-group {!! $errors->has('sending_host') ? 'has-error' : ''!!}" id="sending_host_error">
-                    <label>Sending Host</label>
+                    <label> Host</label>
                     {!! $errors->first('sending_host', '<spam class="help-block">:message</spam>') !!} 
                     <input type="text" name="sending_host" class="form-control" id="sending_host" value="{!! $emails->sending_host !!}">
                 </div> 
                 <!-- sending port -->
                 <div class="col-xs-2 form-group {!! $errors->has('sending_port') ? 'has-error' : ''!!}" id="sending_port_error">
-                    <label>Sending Port</label>
+                    <label> Port</label>
                     {!! $errors->first('sending_port', '<spam class="help-block">:message</spam>') !!}
                     <input type="text" name="sending_port" class="form-control" id="sending_port"  value="{!! $emails->sending_port !!}">
                 </div>
                 <!-- Encryption -->
                 <div class="col-xs-2 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
-                    <label>Sending Encryption</label>
+                    <label> Encryption</label>
                     {!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
                     <select name="sending_encryption" class="form-control" id="sending_encryption">
                         <option value="">-----Select-----</option>

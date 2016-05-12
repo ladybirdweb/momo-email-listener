@@ -128,7 +128,6 @@ class EmailsController extends Controller {
                 $return = 1;
             }
         }
-
         return $return;
     }
 
@@ -141,12 +140,13 @@ class EmailsController extends Controller {
      * @return type Redirect
      */
     public function store($request, $imap_check) {
+//        dd($request->input('smtp_validate'));
         $email = new Emails();
         try {
             // saving all the fields to the database
             if ($email->fill($request->except('password', 'fetching_status', 'fetching_encryption', 'sending_status', 'auto_response'))->save() == true) {
                 if ($request->input('password')) {
-                    $email->password = Crypt::encrypt($request->input('password'));
+                    $email->password = \Crypt::encrypt($request->input('password'));
                 }
                 if ($request->fetching_status == 'on') {
                     $email->fetching_status = 1;
@@ -168,11 +168,12 @@ class EmailsController extends Controller {
                 } else {
                     $email->fetching_encryption = $request->fetching_encryption;
                 }
-                if ($request->smtp_authentication == 'on') {
-                    $email->smtp_authentication = 1;
+                if ($request->smtp_validate == 'on') {
+                    $email->smtp_validate = 1;
                 } else {
-                    $email->smtp_authentication = 0;
+                    $email->smtp_validate = 0;
                 }
+//                dd($email);
                 // inserting the encrypted value of password
                 $email->save(); // run save
                 // returns success message for successful email creation
@@ -341,10 +342,10 @@ class EmailsController extends Controller {
         } else {
             $emails->fetching_encryption = $request->fetching_encryption;
         }
-        if ($request->smtp_authentication == 'on') {
-            $email->smtp_authentication = 1;
+        if ($request->smtp_validate == 'on') {
+            $email->smtp_validate = 1;
         } else {
-            $email->smtp_authentication = 0;
+            $email->smtp_validate = 0;
         }
         // inserting the encrypted value of password
         $emails->password = Crypt::encrypt($request->input('password'));
@@ -476,7 +477,7 @@ class EmailsController extends Controller {
         if ($request->input('sending_protocol') == 'smtp') {
             $mail = new \PHPMailer();
             $mail->isSMTP();
-            if ($request->smtp_validate == 'on') {
+            if ($request->input('smtp_validate') == 'on') {
                 $mail->SMTPOptions = array(
                     'ssl' => array(
                         'verify_peer' => false,
@@ -486,11 +487,13 @@ class EmailsController extends Controller {
                 );
             }
             $mail->Host = $request->input('sending_host');            // Specify main and backup SMTP servers
-            //$mail->SMTPAuth = true;                                   // Enable SMTP authentication
+            $mail->SMTPAuth = true;                                   // Enable SMTP authentication
             $mail->Username = $request->input('email_address');       // SMTP username
             $mail->Password = $request->input('password');            // SMTP password
             $mail->SMTPSecure = $request->input('sending_encryption'); // Enable TLS encryption, `ssl` also accepted
             $mail->Port = $request->input('sending_port');            // TCP port to connect to
+//            dd($mail);
+
             if ($mail->smtpConnect() == true) {
                 $mail->smtpClose();
                 $return = 1;
