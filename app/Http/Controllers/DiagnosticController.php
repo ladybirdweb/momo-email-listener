@@ -15,15 +15,14 @@ use App\Http\Requests\DiagnosRequest;
  *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class DiagnosticController extends Controller
-{
+class DiagnosticController extends Controller {
+
     /**
      * get the diagnostic page for email sending.
      *
      * @return type view
      */
-    public function getDiag(Emails $email)
-    {
+    public function getDiag(Emails $email) {
         try {
             $emails = $email->all();
 
@@ -38,8 +37,7 @@ class DiagnosticController extends Controller
      *
      * @return type view
      */
-    public function postDiag(DiagnosRequest $request)
-    {
+    public function postDiag(DiagnosRequest $request) {
         try {
             $email_details = Emails::where('id', '=', $request->from)->first();
             if ($email_details->sending_protocol == 'mail') {
@@ -55,7 +53,7 @@ class DiagnosticController extends Controller
                 $mail->Subject = $request->subject;
                 $mail->MsgHTML($request->message);
                 if (!$mail->Send()) {
-                    $return = 'Mailer Error: '.$mail->ErrorInfo;
+                    $return = 'Mailer Error: ' . $mail->ErrorInfo;
                 } else {
                     $return = 'Message sent from Php-Mail';
                 }
@@ -63,6 +61,15 @@ class DiagnosticController extends Controller
                 $mail = new \PHPMailer();
                 //$mail->SMTPDebug = 3;                                     // Enable verbose debug output
                 $mail->isSMTP();                                            // Set mailer to use SMTP
+                if ($email_details->sending_protocol == "1") {
+                    $mail->SMTPOptions = array(
+                        'ssl' => array(
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true
+                        )
+                    );
+                }
                 $mail->Host = $email_details->sending_host;                 // Specify main and backup SMTP servers
                 $mail->SMTPAuth = true;                                     // Enable SMTP authentication
                 $mail->Username = $email_details->email_address;                 // SMTP username
@@ -82,7 +89,7 @@ class DiagnosticController extends Controller
                 $mail->Body = $request->message;
 //dd($mail);
                 if (!$mail->send()) {
-                    $return = 'Mailer Error: '.$mail->ErrorInfo;
+                    $return = 'Mailer Error: ' . $mail->ErrorInfo;
                 } else {
                     $return = 'Message has been sent';
                 }
@@ -93,4 +100,5 @@ class DiagnosticController extends Controller
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
+
 }

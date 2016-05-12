@@ -180,7 +180,7 @@ class="active"
                 </div>
                 <div class="col-xs-2 form-group">
                     <br/>
-                    <!--<input type="checkbox" name="smtp_validate" value="/novalidate-cert" id="smtp_validate">&nbsp; Validate certificates from TLS/SSL server-->
+                    <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; Validate certificates from TLS/SSL server
                 </div>
             </div>
         </div>
