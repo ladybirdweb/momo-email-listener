@@ -35,6 +35,7 @@ class="active"
             <h5>From: {!! $thread->email !!} <span class="mailbox-read-time pull-right">{!! $thread->created_at !!}</span></h5>
         </div>
         <div class="mailbox-read-message">
+            
             <?php
             $attachment = \App\Attcahment::where('thread_id', '=', $thread->id)->first();
             if ($attachment == null) {
@@ -95,6 +96,13 @@ class="active"
                 $body2 = $parsed;
                 $body = str_replace($body2, " ", $body);
             }
+            $body  = App\Http\Controllers\MailController::trimInjections($body);
+            //dd($body);
+            require_once base_path("vendor/htmlpurifier/library/HTMLPurifier.auto.php");
+            $config = HTMLPurifier_Config::createDefault();
+            $purifier = new HTMLPurifier($config);
+            $body = $purifier->purify($body);
+            //dd($config);
             ?>
             {!! $body !!}    
         </div>
@@ -130,6 +138,7 @@ class="active"
                 ?>
             </ul>
         </div>
+        
     </div>
 </div>
 @stop
