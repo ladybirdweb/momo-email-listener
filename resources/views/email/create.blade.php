@@ -119,7 +119,7 @@ class="active"
                 </div>
                 <div class="col-xs-2 form-group">                   
                     <br/>
-                    <input type="checkbox" name="imap_validate" value="/novalidate-cert" id="imap_validate">&nbsp; Validate certificates from TLS/SSL server
+                    <input type="checkbox" name="imap_validate" id="imap_validate" checked>&nbsp; Validate certificates from TLS/SSL server
                 </div>
             </div>
         </div>
@@ -180,7 +180,7 @@ class="active"
                 </div>
                 <div class="col-xs-2 form-group">
                     <br/>
-                    <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; Validate certificates from TLS/SSL server
+                    <input type="checkbox" name="smtp_validate" id="smtp_validate" checked>&nbsp; Validate certificates from TLS/SSL server
                 </div>
             </div>
         </div>

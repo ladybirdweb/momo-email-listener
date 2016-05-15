@@ -23,7 +23,6 @@ use PhpImap\Mailbox as ImapMailbox;
 class MailController extends Controller {
 
     public function readmails() {
-        
         $emails = Emails::get();
         // fetch each mails by mails
         foreach ($emails as $email) {
@@ -72,7 +71,7 @@ class MailController extends Controller {
                     $mail = $mailbox->getMail($mailId);
                     //dd($mail);
                     $body = $mail->textHtml;
-                    if($body!=null){
+                    if ($body != null) {
                         $body = self::trimTableTag($body);
                     }
                     // if mail body has no messages fetch backup mail
@@ -82,14 +81,13 @@ class MailController extends Controller {
                     if ($body == null) {
                         $attach = $mail->getAttachments();
                         $path = $attach['html-body']->filePath;
-                        if($path==null){
-                          $path = $attach['text-body']->filePath;
+                        if ($path == null) {
+                            $path = $attach['text-body']->filePath;
                         }
-                        
+
                         $body = file_get_contents($path);
                         //dd($body);
                         $body = self::trimTableTag($body);
-                        
                     }
                     // check if mail has subject
                     if (isset($mail->subject)) {
@@ -218,7 +216,7 @@ class MailController extends Controller {
         $total = strlen($fist_string);
         $diff = $total - $last_pos;
         $str = substr_replace($fist_string, '', $last_pos, -1);
-         $final_str = str_finish($str, '</table>');
+        $final_str = str_finish($str, '</table>');
         return $final_str;
     }
 
@@ -226,7 +224,5 @@ class MailController extends Controller {
         $body = str_replace('=3D', '', $html);
         return $body;
     }
-
-    
 
 }

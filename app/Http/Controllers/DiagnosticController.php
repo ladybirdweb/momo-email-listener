@@ -61,7 +61,7 @@ class DiagnosticController extends Controller {
                 $mail = new \PHPMailer();
                 //$mail->SMTPDebug = 3;                                     // Enable verbose debug output
                 $mail->isSMTP();                                            // Set mailer to use SMTP
-                if ($email_details->sending_protocol == "1") {
+                if ($email_details->smtp_validate == "1") {
                     $mail->SMTPOptions = array(
                         'ssl' => array(
                             'verify_peer' => false,
@@ -94,7 +94,6 @@ class DiagnosticController extends Controller {
                     $return = 'Message has been sent';
                 }
             }
-
             return redirect()->back()->with('success', $return);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
