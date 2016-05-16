@@ -224,5 +224,14 @@ class MailController extends Controller {
         $body = str_replace('=3D', '', $html);
         return $body;
     }
+    
+    public static function trimInjections($html,$tags=['<script>','</script>','<style>','</style>','<?php','?>']){
+        $replace = [];
+        foreach($tags as $key=>$tag){
+            $replace[$key]  = htmlspecialchars($tag);   
+        }
+        $body = str_replace($tags, $replace, $html);
+        return $body;
+    }
 
 }
